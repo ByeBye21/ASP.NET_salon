@@ -1,1 +1,3 @@
 # WEB
+
+Bu proje, ASP.NET Core MVC kullanarak kuaför salonları için bir yönetim uygulaması geliştirmeyi amaçlamaktadır. Kullanıcılar, uygun çalışanlardan randevu alabilirken, salon sahipleri de çalışanların verimliliğini izleyebilir. Uygulama, salonların sunduğu işlemleri, çalışanların uzmanlık alanlarını ve randevu sistemini yönetir. Ayrıca, yapay zeka entegrasyonu ile kullanıcılar fotoğraf yükleyerek saç modeli veya renk önerileri alabilir. Proje, C#, Entity Framework Core, SQL Server/PostgreSQL ve Bootstrap gibi teknolojileri kullanmaktadır. Kullanıcı kaydı ve admin paneli ile birlikte REST API desteği sunmaktadır.
