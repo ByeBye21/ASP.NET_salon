@@ -20,5 +20,6 @@ namespace WEB_Project.Data
                 new Category { Id = 3, Num = 3, Name = "ByeBye23" }
                 );
         }
-    }
+		public DbSet<User> Users { get; set; }
+	}
 }
