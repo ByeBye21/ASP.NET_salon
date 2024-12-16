@@ -150,7 +150,7 @@ namespace WEB_Project.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    if(string.IsNullOrEmpty(Input.Role))
+                    if(!string.IsNullOrEmpty(Input.Role))
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);
                     } 
