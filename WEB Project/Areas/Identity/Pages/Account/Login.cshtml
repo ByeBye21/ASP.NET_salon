@@ -16,7 +16,6 @@
                 <section>
                     <form id="account" method="post">
                         <h3 class="border-bottom pb-3 mb-4 text-secondary text-center">Use a local account to log in.</h3>
-                        <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                         <div class="form-floating mb-3">
                             <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -51,6 +50,10 @@
                     </form>
                 </section>
             </div>
+            <div class="col-md-6">
+                <img src="~/images/login.jpg" style="width: 550px;" alt="login">
+            </div>
+        </div>
     </div>
 </div>
 
