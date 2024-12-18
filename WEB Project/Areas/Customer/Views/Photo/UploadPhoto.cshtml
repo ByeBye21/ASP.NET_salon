@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Upload Photo";
+}
+
+<h2>Upload Photo</h2>
+
+<form asp-action="UploadPhoto" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="photo">Select a photo to upload:</label>
+        <input type="file" name="file" id="photo" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Upload Photo</button>
+</form>
+
+@if (ViewBag.ImageUrl != null)
+{
+    <div class="mt-3">
+        <h4>Generated Image:</h4>
+        <img src="@ViewBag.ImageUrl" alt="Generated Image" class="img-fluid" />
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger mt-3">
+        <strong>Error:</strong> @ViewBag.Error
+    </div>
+}
