@@ -37,7 +37,7 @@ namespace WEB_Project.Areas.Customer.Controllers
 				}
 
 				// OpenAI ile analiz veya görüntü oluşturma işlemi
-				ViewBag.ImageUrl = await GenerateImage("Bu bir erkek yüzü bu yüze uygun bir saç modeli tasarlayın cevap olarak gönderdiğiniz fotoğraf yüzün önden görünümü şeklinde olsun ve fotoğraflarda boyundan üstü gözüksün yani saç modeli anlaşılsın." +
+				ViewBag.ImageUrl = await GenerateImage("Bir erkeğin yüz şekli ve saç dokusuna dayalı modern bir saç modeli önerisi oluştur. Saç modeli, erkekler için uygun olmalı ve kişinin görünümünü geliştirecek şekilde tasarlanmalıdır. Saç uzunluğu ve tarzı erkeklere hitap eden bir şekilde olmalı." +
 					"");
 			}
 			else
@@ -57,7 +57,7 @@ namespace WEB_Project.Areas.Customer.Controllers
             {{
                 ""prompt"": ""{prompt}"",
                 ""n"": 1,
-                ""size"": ""512x512""
+                ""size"": ""1024x1024""
             }}", Encoding.UTF8, "application/json");
 
 			var response = await client.PostAsync("https://api.openai.com/v1/images/generations", requestContent);
