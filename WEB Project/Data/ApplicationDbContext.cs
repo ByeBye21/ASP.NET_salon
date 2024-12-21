@@ -5,24 +5,23 @@ using WEB_Project.Models;
 
 namespace WEB_Project.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
-    {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-            
-        }
+	public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+	{
+		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+		{
+		}
 
-        public DbSet<Category> Categories { get; set; }
+		public DbSet<Category> Categories { get; set; } // Categories DbSet'ini ekliyoruz
+		public DbSet<Salon> Salons { get; set; } // Salon modelini ekliyoruz
+		public DbSet<Service> Services { get; set; } // Service modelini ekliyoruz
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1, Num = 1, Name = "ByeBye21" },
-                new Category { Id = 2, Num = 2, Name = "ByeBye22" },
-                new Category { Id = 3, Num = 3, Name = "ByeBye23" }
-                );
-        }
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+			// Varsayılan salon verisi ekle
+			modelBuilder.Entity<Salon>().HasData(
+				new Salon { Id = 1, Name = "My Salon", Address = "123 Salon Street", PhoneNumber = "123-456-7890", WorkingHours="09.00- 18.00" }
+					);
+		}
 	}
 }

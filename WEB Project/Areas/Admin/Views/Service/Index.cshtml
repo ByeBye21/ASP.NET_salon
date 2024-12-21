@@ -1,0 +1,27 @@
+﻿@model IEnumerable<WEB_Project.Models.Service>
+
+@{
+    ViewData["Title"] = "İşlemler";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>İşlem Adı</th>
+            <th>Ücret</th>
+            <th>Süre</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var service in Model)
+        {
+            <tr>
+                <td>@service.Name</td>
+                <td>@service.Price.ToString("C")</td>
+                <td>@service.Duration</td>
+            </tr>
+        }
+    </tbody>
+</table>

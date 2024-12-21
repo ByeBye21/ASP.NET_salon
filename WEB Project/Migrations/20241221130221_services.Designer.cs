@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WEB_Project.Data;
 
@@ -11,9 +12,11 @@ using WEB_Project.Data;
 namespace WEB_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241221130221_services")]
+    partial class services
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,6 +241,26 @@ namespace WEB_Project.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Saç Kesimi",
+                            Num = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Saç Boyama",
+                            Num = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Yüz Bakımı",
+                            Num = 0
+                        });
                 });
 
             modelBuilder.Entity("WEB_Project.Models.Salon", b =>
@@ -267,16 +290,6 @@ namespace WEB_Project.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Salons");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "123 Salon Street",
-                            Name = "My Salon",
-                            PhoneNumber = "123-456-7890",
-                            WorkingHours = "09.00- 18.00"
-                        });
                 });
 
             modelBuilder.Entity("WEB_Project.Models.Service", b =>
