@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WEB_Project.Data;
 
@@ -11,9 +12,11 @@ using WEB_Project.Data;
 namespace WEB_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241221165956_userr")]
+    partial class userr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,36 +243,6 @@ namespace WEB_Project.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("WEB_Project.Models.Employee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AvailabilityHours")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Expertise")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SalonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SalonId");
-
-                    b.ToTable("Employees");
-                });
-
             modelBuilder.Entity("WEB_Project.Models.Salon", b =>
                 {
                     b.Property<int>("Id")
@@ -320,9 +293,6 @@ namespace WEB_Project.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -334,8 +304,6 @@ namespace WEB_Project.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("SalonId");
 
@@ -393,19 +361,8 @@ namespace WEB_Project.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WEB_Project.Models.Employee", b =>
-                {
-                    b.HasOne("WEB_Project.Models.Salon", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("SalonId");
-                });
-
             modelBuilder.Entity("WEB_Project.Models.Service", b =>
                 {
-                    b.HasOne("WEB_Project.Models.Employee", null)
-                        .WithMany("Services")
-                        .HasForeignKey("EmployeeId");
-
                     b.HasOne("WEB_Project.Models.Salon", "Salon")
                         .WithMany("Services")
                         .HasForeignKey("SalonId")
@@ -415,15 +372,8 @@ namespace WEB_Project.Migrations
                     b.Navigation("Salon");
                 });
 
-            modelBuilder.Entity("WEB_Project.Models.Employee", b =>
-                {
-                    b.Navigation("Services");
-                });
-
             modelBuilder.Entity("WEB_Project.Models.Salon", b =>
                 {
-                    b.Navigation("Employees");
-
                     b.Navigation("Services");
                 });
 #pragma warning restore 612, 618

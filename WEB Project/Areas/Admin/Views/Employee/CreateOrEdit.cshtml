@@ -1,0 +1,21 @@
+﻿@model WEB_Project.Models.Employee
+
+<h2>@(Model.Id == 0 ? "Yeni Çalışan Ekle" : "Çalışan Düzenle")</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Name">Ad:</label>
+        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+    </div>
+    <div class="form-group">
+        <label for="Expertise">Uzmanlık:</label>
+        <input type="text" class="form-control" id="Expertise" name="Expertise" value="@Model.Expertise" required />
+    </div>
+    <div class="form-group">
+        <label for="AvailabilityHours">Uygunluk Saatleri:</label>
+        <input type="text" class="form-control" id="AvailabilityHours" name="AvailabilityHours" value="@Model.AvailabilityHours" required />
+    </div>
+    
+    <button type="submit" class="btn btn-primary mt-3">@(Model.Id == 0 ? "Kaydet" : "Güncelle")</button>
+    <a href="@Url.Action("Index", "Employee", new { area = "Admin" })" class="btn btn-secondary mt-3">İptal</a>
+</form>

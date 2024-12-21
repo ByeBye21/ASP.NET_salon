@@ -13,5 +13,6 @@ namespace WEB_Project.Models
 
 			// Salonun sunduğu hizmetler (işlemler) ile ilişki
 			public List<Service> Services { get; set; }
-		}
+	    	public List<Employee> Employees { get; set; } // Çalışanlar
+	}
 }

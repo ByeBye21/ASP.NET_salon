@@ -30,10 +30,14 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (User.IsInRole(SD.Role_Admin)) // Admin kontrolü
+                       
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Customer" asp-controller="Salon" asp-action="Index">Salon Bilgileri</a>
+                            </li>
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="Salon" asp-action="Edit" asp-route-id="1">Salon Düzenle</a>
+                                <a class="nav-link" asp-area="Admin" asp-controller="Employee" asp-action="Index">Çalışan Yönetimi</a>
                             </li>
                         }
                         <li class="nav-item">

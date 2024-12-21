@@ -22,18 +22,13 @@
 
                 <dt class="col-sm-2">Telefon Numarası:</dt>
                 <dd class="col-sm-10">@Model.PhoneNumber</dd>
+                <dt class="col-sm-2">Çalışma Saatleri:</dt>
+                <dd class="col-sm-10">@Model.WorkingHours</dd>
             </dl>
 
-            <!-- Salon düzenle butonu -->
-            <a href="@Url.Action("Edit", "Salon", new { id = Model.Id, area = "Admin" })" class="btn btn-primary">Salon Düzenle</a>
+   
         </div>
     </div>
 }
-else
-{
-    <div class="alert alert-warning">
-        Salon bilgileri bulunamadı. Lütfen salon bilgisi ekleyin.
-    </div>
-    <!-- Salon ekle butonu -->
-    <a href="@Url.Action("Create", "Salon", new { area = "Admin" })" class="btn btn-success">Salon Ekle</a>
-}
+
+ 

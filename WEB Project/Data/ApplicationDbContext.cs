@@ -14,6 +14,7 @@ namespace WEB_Project.Data
 		public DbSet<Category> Categories { get; set; } // Categories DbSet'ini ekliyoruz
 		public DbSet<Salon> Salons { get; set; } // Salon modelini ekliyoruz
 		public DbSet<Service> Services { get; set; } // Service modelini ekliyoruz
+		public DbSet<Employee> Employees { get; set; } // Employee modelini ekliyoruz
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
