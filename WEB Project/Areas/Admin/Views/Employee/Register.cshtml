@@ -1,4 +1,4 @@
-﻿@model RegisterEmployee
+﻿@model WEB_Project.Models.RegisterEmployee
 
 <div class="card shadow border-0 mt-4">
     <div class="card-header bg-primary bg-gradient text-secondary py-4">
@@ -43,7 +43,7 @@
                 <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
 
-            <div class="mb-3 col-md-2">
+            <div class="mb-3">
                 <label for="expertiseDropdown" class="form-label">Expertise</label>
                 <nav class="navbar navbar-light bg-light p-2">
                     <div class="dropdown">
@@ -51,10 +51,12 @@
                             Select Expertise
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="expertiseDropdown">
-                            <li><a class="dropdown-item" href="#" onclick="selectExpertise(event, 'Haircut')">Haircut</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectExpertise(event, 'Beard Trim')">Beard Trim</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectExpertise(event, 'Shaving')">Shaving</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="selectExpertise(event, 'Styling')">Styling</a></li>
+                            @foreach (var item in (List<WEB_Project.Models.Expertise>)ViewBag.ExpertiseList)
+                            {
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="selectExpertise(event, '@item.Area')">@item.Area</a>
+                                </li>
+                            }
                         </ul>
                         <input type="hidden" id="selectedExpertise" name="Expertise" />
                     </div>

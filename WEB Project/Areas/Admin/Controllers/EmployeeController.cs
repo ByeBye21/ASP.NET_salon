@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WEB_Project.Data;
 using WEB_Project.Models;
 
@@ -38,23 +39,37 @@ namespace WEB_Project.Areas.Admin.Controllers
                       {
                           Name = user.Name,
                           Email = user.Email,
-                          Expertise = user.Expertise,
+                          ExpertiseIds = user.Expertises.Select(e => e.Id).ToList(),
                           StartTime = (TimeSpan)user.StartTime,
                           EndTime = (TimeSpan)user.EndTime
                       });
 
             if (!string.IsNullOrEmpty(expertise))
             {
-                employeesQuery = employeesQuery.Where(e => e.Expertise == expertise);
+                employeesQuery = employeesQuery.Where(e =>
+                    e.ExpertiseIds.Any(id => _db.Expertises.Any(ex => ex.Area == expertise && ex.Id == id)));
             }
 
             var employees = employeesQuery.ToList();
+
+            // Prepare a dictionary for expertise areas
+            var expertiseList = _db.Expertises.ToDictionary(e => e.Id, e => e.Area);
+
+            // Populate Expertise property for display
+            foreach (var employee in employees)
+            {
+                employee.Expertise = string.Join(", ", employee.ExpertiseIds.Select(id => expertiseList[id]));
+            }
+
             return View(employees);
         }
+
+
 
         // Display the register form
         public IActionResult Register()
         {
+            ViewBag.ExpertiseList = _db.Expertises.ToList();
             return View();
         }
 
@@ -70,9 +85,9 @@ namespace WEB_Project.Areas.Admin.Controllers
                     Email = model.Email,
                     EmailConfirmed = true,
                     Name = model.Name,
-                    Expertise = model.Expertise,
                     StartTime = model.StartTime,
-                    EndTime = model.EndTime
+                    EndTime = model.EndTime,
+                    Expertises = model.ExpertiseIds.Select(id => _db.Expertises.Find(id)).ToList()
                 };
 
                 var result = await _userManager.CreateAsync(employee, model.Password);
@@ -94,6 +109,7 @@ namespace WEB_Project.Areas.Admin.Controllers
                 }
             }
 
+            ViewBag.ExpertiseList = _db.Expertises.ToList();
             return View(model);
         }
     }

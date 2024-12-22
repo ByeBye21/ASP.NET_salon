@@ -1,0 +1,29 @@
+﻿@model WEB_Project.Models.Expertise
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-primary bg-gradient text-secondary py-4">
+        <h2 class="text-center">Edit Expertise</h2>
+    </div>
+    <div class="card-body p-4">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label asp-for="Area" class="form-label">Expertise Area</label>
+                <input asp-for="Area" class="form-control" />
+                <span asp-validation-for="Area" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Cost" class="form-label">Cost</label>
+                <input asp-for="Cost" type="number" class="form-control" step="0.01" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Time" class="form-label">Time</label>
+                <input asp-for="Time" type="time" class="form-control" />
+                <span asp-validation-for="Time" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+﻿@model List<WEB_Project.Models.Expertise>
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-primary bg-gradient text-secondary py-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="py-2">Expertise Management</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <!-- Add New Expertise Form -->
+        <form asp-action="Add" method="post" class="mb-4 p-3 border rounded">
+            <div class="row g-3 align-items-center">
+                <!-- Expertise Area -->
+                <div class="col-md-4">
+                    <label for="area" class="form-label">Expertise Area</label>
+                    <input type="text" name="area" id="area" class="form-control" placeholder="Enter expertise area" required />
+                </div>
+
+                <!-- Cost -->
+                <div class="col-md-3">
+                    <label for="cost" class="form-label">Cost</label>
+                    <input type="number" name="cost" id="cost" class="form-control" placeholder="Enter cost" step="0.01" min="0" required />
+                </div>
+
+                <!-- Time -->
+                <div class="col-md-3">
+                    <label for="time" class="form-label">Time</label>
+                    <input type="time" name="time" id="time" class="form-control" required />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="col-md-2 d-flex align-self-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-plus-square-dotted"></i> Add Expertise
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+        <!-- Expertise Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Expertise Area</th>
+                        <th>Cost</th>
+                        <th>Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var expertise in Model)
+                        {
+                            <tr>
+                                <td>@expertise.Id</td>
+                                <td>@expertise.Area</td>
+                                <td>@expertise.Cost.ToString("C2")</td> <!-- Format cost as currency -->
+                                <td>@expertise.Time.ToString(@"hh\:mm")</td> <!-- Format time -->
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@expertise.Id" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <form asp-action="Delete" method="post" style="display: inline;">
+                                        <input type="hidden" name="id" value="@expertise.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center">No expertise areas found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
