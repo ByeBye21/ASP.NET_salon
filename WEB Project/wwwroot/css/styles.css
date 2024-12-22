@@ -1,0 +1,74 @@
+﻿
+    body
+
+{
+    background-image: url('https://img.pixers.pics/pho_wat(s3:700/FO/64/15/60/90/700_FO64156090_b2f2d3c6ea9f7bf4cd7975e0bda735df.jpg,700,700,cms:2018/10/5bd1b6b8d04b8_220x50-watermark.png,over,480,650,jpg)/duvar-resimleri-berber-eski-arka-plan.jpg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+/* Header */
+.header {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 40px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+    .header h1 {
+        font-size: 3em; /* Berber adı daha büyük yapıyoruz */
+        font-weight: bold; /* Kalın yazı */
+        text-transform: uppercase; /* Harfleri büyük yapar */
+        letter-spacing: 2px; /* Harfler arasında mesafe bırakır */
+        color: #f0a500; /* Berber ismi rengini değiştirme */
+    }
+
+/* Card Stil */
+.card {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+    .card h2 {
+        font-size: 2em; /* Başlıkları büyütüyoruz */
+        font-weight: bold;
+        color: #333;
+    }
+
+    .card p {
+        font-size: 1.5em; /* Paragrafları büyütüyoruz */
+        color: #555;
+    }
+
+/* Buton */
+button {
+    background-color: #f89c42;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.2em; /* Buton metnini biraz büyütüyoruz */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    button:hover {
+        background-color: #f08d3f;
+    }
+
+}

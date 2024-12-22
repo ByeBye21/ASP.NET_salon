@@ -1,3 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Ana Sayfa";
-}
+﻿@model BarberShopInfo
+<head>
+    <link href="~/css/styles.css" rel="stylesheet" />
+</head>
+
+<div class="container">
+    <div class="header">
+        <h1>@(string.IsNullOrEmpty(Model?.Name) ? "Berber Dükkanı" : Model.Name)</h1>
+    </div>
+
+    <div class="card">
+        <h2>Adres:</h2>
+        <p>@(Model?.Address ?? "Adres bilgisi yok")</p>
+    </div>
+
+    <div class="card">
+        <h2>Telefon:</h2>
+        <p>@(Model?.Phone ?? "Telefon bilgisi yok")</p>
+    </div>
+
+    <div class="card">
+        <h2>Çalışma Saatleri:</h2>
+        <p>@(Model?.WorkingHours ?? "Çalışma saatleri belirtilmemiş")</p>
+    </div>
+
+    <button onclick="location.href='/Appointment'">Randevu Al</button>
+</div>
