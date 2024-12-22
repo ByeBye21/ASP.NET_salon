@@ -1,136 +1,100 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using WEB_Project.Data;
 using WEB_Project.Models;
-using System.Threading.Tasks;
 
 namespace WEB_Project.Areas.Admin.Controllers
 {
-	[Area("Admin")]
-	public class EmployeeController : Controller
-	{
-		private readonly ApplicationDbContext _context;
+    [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
+    public class EmployeeController : Controller
+    {
+        private readonly ApplicationDbContext _db;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-		public EmployeeController(ApplicationDbContext context)
-		{
-			_context = context;
-		}
+        public EmployeeController(ApplicationDbContext db, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            _db = db;
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
 
-		// Çalışanları listeleme
-		public async Task<IActionResult> Index()
-		{
-			var employees = await _context.Employees.ToListAsync(); // Asenkron kullanım
-			return View(employees);
-		}
+        // Main page showing the employee list
+        public IActionResult Index(string expertise)
+        {
+            var employeeRoleId = _db.Roles
+                .Where(r => r.Name == SD.Role_Employee)
+                .Select(r => r.Id)
+                .FirstOrDefault();
 
-		// Yeni çalışan ekleme
-		public IActionResult Create()
-		{
-			var employee = new Employee(); // Yeni çalışan nesnesi oluşturuluyor
-			return View("CreateOrEdit", employee); // "CreateOrEdit" görünümüne yönlendirme
-		}
+            var employeesQuery = _db.UserRoles
+                .Where(ur => ur.RoleId == employeeRoleId)
+                .Join(_db.ApplicationUsers,
+                      ur => ur.UserId,
+                      user => user.Id,
+                      (ur, user) => new RegisterEmployee
+                      {
+                          Name = user.Name,
+                          Email = user.Email,
+                          Expertise = user.Expertise,
+                          StartTime = (TimeSpan)user.StartTime,
+                          EndTime = (TimeSpan)user.EndTime
+                      });
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(Employee employee)
-		{
-			// ModelState geçerli mi kontrolü
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					_context.Employees.Add(employee); // Çalışan ekle
-					await _context.SaveChangesAsync(); // Veritabanına kaydet
-					return RedirectToAction(nameof(Index)); // Başarıyla kaydedildiğinde çalışanlar listesine dön
-				}
-				catch (Exception ex)
-				{
-					// Eğer bir hata oluşursa, hatayı ekle ve kullanıcıya bildirilmesini sağla
-					ModelState.AddModelError("", "Veri kaydedilirken bir hata oluştu: " + ex.Message);
-				}
-			}
-			else
-			{
-				// ModelState geçersizse, hata mesajlarını göster
-				ModelState.AddModelError("", "Formdaki veriler geçerli değil.");
-			}
+            if (!string.IsNullOrEmpty(expertise))
+            {
+                employeesQuery = employeesQuery.Where(e => e.Expertise == expertise);
+            }
 
-			// Eğer ModelState geçerli değilse ya da bir hata oluştuysa, aynı sayfaya geri dön
-			return View("CreateOrEdit", employee);
-		}
+            var employees = employeesQuery.ToList();
+            return View(employees);
+        }
 
-		// Çalışan düzenleme
-		public async Task<IActionResult> Edit(int id)
-		{
-			var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id); // Asenkron sorgu
-			if (employee == null)
-			{
-				return NotFound(); // Çalışan bulunamadıysa 404 döner
-			}
+        // Display the register form
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-			return View("CreateOrEdit", employee); // Düzenleme sayfasına yönlendir
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterEmployee model)
+        {
+            if (ModelState.IsValid)
+            {
+                var employee = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    EmailConfirmed = true,
+                    Name = model.Name,
+                    Expertise = model.Expertise,
+                    StartTime = model.StartTime,
+                    EndTime = model.EndTime
+                };
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, Employee employee)
-		{
-			if (id != employee.Id) // İd kontrolü
-			{
-				return NotFound(); // Geçersiz id
-			}
+                var result = await _userManager.CreateAsync(employee, model.Password);
 
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					_context.Update(employee); // Çalışan bilgilerini güncelle
-					await _context.SaveChangesAsync(); // Veritabanına kaydet
-					return RedirectToAction(nameof(Index)); // Başarıyla kaydedildiğinde çalışanlar listesine yönlendir
-				}
-				catch (Exception ex)
-				{
-					ModelState.AddModelError("", "Veri güncellenirken bir hata oluştu: " + ex.Message);
-				}
-			}
+                if (result.Succeeded)
+                {
+                    if (await _roleManager.RoleExistsAsync(SD.Role_Employee))
+                    {
+                        await _userManager.AddToRoleAsync(employee, SD.Role_Employee);
+                    }
 
-			// Eğer model geçerli değilse, aynı sayfaya geri dön
-			return View("CreateOrEdit", employee);
-		}
+                    TempData["SuccessMessage"] = "Employee registered successfully!";
+                    return RedirectToAction("Index");
+                }
 
-		// Çalışan silme
-		public async Task<IActionResult> Delete(int id)
-		{
-			var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id); // Asenkron sorgu
-			if (employee == null)
-			{
-				return NotFound(); // Çalışan bulunamazsa 404 döner
-			}
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
 
-			return View(employee); // Silme sayfasını göster
-		}
-
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			var employee = await _context.Employees.FindAsync(id); // Asenkron sorgu
-			if (employee == null)
-			{
-				return NotFound(); // Eğer çalışan bulunamazsa 404 döner
-			}
-
-			try
-			{
-				_context.Employees.Remove(employee); // Çalışanı sil
-				await _context.SaveChangesAsync(); // Veritabanına kaydet
-				return RedirectToAction(nameof(Index)); // Başarılı ise çalışanlar listesine yönlendir
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError("", "Çalışan silinirken bir hata oluştu: " + ex.Message);
-				return View(employee); // Hata durumunda aynı sayfaya geri dön
-			}
-		}
-	}
+            return View(model);
+        }
+    }
 }

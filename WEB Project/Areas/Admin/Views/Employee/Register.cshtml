@@ -1,0 +1,78 @@
+﻿@model RegisterEmployee
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-primary bg-gradient text-secondary py-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="py-2">Register Employee</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form asp-action="Register" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StartTime" class="form-label">Start Time</label>
+                <input asp-for="StartTime" type="time" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EndTime" class="form-label">End Time</label>
+                <input asp-for="EndTime" type="time" class="form-control" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 col-md-2">
+                <label for="expertiseDropdown" class="form-label">Expertise</label>
+                <nav class="navbar navbar-light bg-light p-2">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-md dropdown-toggle w-100" type="button" id="expertiseDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Expertise
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="expertiseDropdown">
+                            <li><a class="dropdown-item" href="#" onclick="selectExpertise(event, 'Haircut')">Haircut</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectExpertise(event, 'Beard Trim')">Beard Trim</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectExpertise(event, 'Shaving')">Shaving</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="selectExpertise(event, 'Styling')">Styling</a></li>
+                        </ul>
+                        <input type="hidden" id="selectedExpertise" name="Expertise" />
+                    </div>
+                </nav>
+            </div>
+
+            <div class="d-flex justify-content-start mt-4">
+                <button type="submit" class="btn btn-primary btn-md me-2">Register</button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-md">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function selectExpertise(event, value) {
+        event.preventDefault(); // Prevent the default behavior of the anchor tag
+        document.getElementById('expertiseDropdown').textContent = value; // Update the button text
+        document.getElementById('selectedExpertise').value = value; // Set the hidden input value
+    }
+</script>

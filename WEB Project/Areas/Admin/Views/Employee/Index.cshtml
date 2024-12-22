@@ -1,29 +1,57 @@
-﻿@model IEnumerable<WEB_Project.Models.Employee>
+﻿@model List<RegisterEmployee>
 
-<h2>Çalışanlar</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Ad</th>
-            <th>Uzmanlık</th>
-            <th>Uygunluk Saatleri</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var employee in Model)
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-primary bg-gradient text-secondary py-4">
+        <div class="row">
+            <div class="col-9 text-center">
+                <h2 class="py-2">Employee List</h2>
+            </div>
+            <div class="col-3 text-end">
+                <a asp-action="Register" class="btn btn-secondary btn-md">
+                    <i class="bi bi-plus-square-dotted"></i> Add New Employee
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        @if (TempData["SuccessMessage"] != null)
         {
-            <tr>
-                <td>@employee.Name</td>
-                <td>@employee.Expertise</td>
-                <td>@employee.AvailabilityHours</td>
-                <td>
-                    <a href="@Url.Action("Edit", "Employee", new { id = employee.Id })" class="btn btn-warning">Düzenle</a>
-                </td>
-            </tr>
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
         }
-    </tbody>
-</table>
 
-<a href="@Url.Action("Create", "Employee")" class="btn btn-success">Yeni Çalışan Ekle</a>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Expertise</th>
+                        <th>Working Hours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var employee in Model)
+                        {
+                            <tr>
+                                <td>@employee.Name</td>
+                                <td>@employee.Email</td>
+                                <td>@employee.Expertise</td>
+                                <td>@employee.StartTime.ToString(@"hh\:mm") - @employee.EndTime.ToString(@"hh\:mm")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">No employees found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
