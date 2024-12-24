@@ -24,7 +24,7 @@ using (var scope = app.Services.CreateScope())
 	var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
 	// Ensure the roles exist
-	string[] roles = { "Admin", "Employee", "Customer" };
+	string[] roles = { "Admin", "Customer" };
 	foreach (var role in roles)
 	{
 		if (!await roleManager.RoleExistsAsync(role))

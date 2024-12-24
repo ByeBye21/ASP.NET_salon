@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WEB_Project.Data;
 using WEB_Project.Models;
 
-namespace WEB_Project.Areas.Admin.Controllers
+namespace WEB_Project.titles.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = SD.Role_Admin)]
@@ -25,11 +25,11 @@ namespace WEB_Project.Areas.Admin.Controllers
 
         // POST: Expertise/Add
         [HttpPost]
-        public IActionResult Add(string area, decimal cost, TimeSpan time)
+        public IActionResult Add(string title, decimal cost, TimeSpan time)
         {
-            if (!string.IsNullOrEmpty(area))
+            if (!string.IsNullOrEmpty(title))
             {
-                var expertise = new Expertise { Area = area, Cost = cost, Time = time };
+                var expertise = new Expertise { Title = title, Cost = cost, Time = time };
                 _context.Expertises.Add(expertise);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Expertise added successfully!";
@@ -68,10 +68,10 @@ namespace WEB_Project.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingExpertise = _context.Expertises.Find(updatedExpertise.Id);
+                var existingExpertise = _context.Expertises.Find(updatedExpertise.ExpertiseId);
                 if (existingExpertise != null)
                 {
-                    existingExpertise.Area = updatedExpertise.Area;
+                    existingExpertise.Title = updatedExpertise.Title;
                     existingExpertise.Cost = updatedExpertise.Cost;
                     existingExpertise.Time = updatedExpertise.Time;
 

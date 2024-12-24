@@ -12,8 +12,8 @@ using WEB_Project.Data;
 namespace WEB_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241222181457_anasayfa")]
-    partial class anasayfa
+    [Migration("20241224213312_Db")]
+    partial class Db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace WEB_Project.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EmployeeExpertise", b =>
+                {
+                    b.Property<int>("EmployeesEmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpertisesExpertiseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeesEmployeeId", "ExpertisesExpertiseId");
+
+                    b.HasIndex("ExpertisesExpertiseId");
+
+                    b.ToTable("EmployeeExpertise");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -261,20 +276,36 @@ namespace WEB_Project.Migrations
                     b.ToTable("BarberShopInfos");
                 });
 
-            modelBuilder.Entity("WEB_Project.Models.Expertise", b =>
+            modelBuilder.Entity("WEB_Project.Models.Employee", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("EmployeeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
 
-                    b.Property<string>("Area")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("EmployeeId");
+
+                    b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("WEB_Project.Models.Expertise", b =>
+                {
+                    b.Property<int>("ExpertiseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpertiseId"));
 
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
@@ -282,9 +313,11 @@ namespace WEB_Project.Migrations
                     b.Property<TimeSpan>("Time")
                         .HasColumnType("time");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("ExpertiseId");
 
                     b.ToTable("Expertises");
                 });
@@ -293,17 +326,26 @@ namespace WEB_Project.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<TimeSpan?>("EndTime")
-                        .HasColumnType("time");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan?>("StartTime")
-                        .HasColumnType("time");
-
                     b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("EmployeeExpertise", b =>
+                {
+                    b.HasOne("WEB_Project.Models.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesEmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WEB_Project.Models.Expertise", null)
+                        .WithMany()
+                        .HasForeignKey("ExpertisesExpertiseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -355,19 +397,6 @@ namespace WEB_Project.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WEB_Project.Models.Expertise", b =>
-                {
-                    b.HasOne("WEB_Project.Models.ApplicationUser", null)
-                        .WithMany("Expertises")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WEB_Project.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Expertises");
                 });
 #pragma warning restore 612, 618
         }

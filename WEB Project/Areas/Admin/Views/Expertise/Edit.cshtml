@@ -6,11 +6,11 @@
     </div>
     <div class="card-body p-4">
         <form asp-action="Edit" method="post">
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ExpertiseId" />
             <div class="mb-3">
-                <label asp-for="Area" class="form-label">Expertise Area</label>
-                <input asp-for="Area" class="form-control" />
-                <span asp-validation-for="Area" class="text-danger"></span>
+                <label asp-for="Title" class="form-label">Expertise Area</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Cost" class="form-label">Cost</label>

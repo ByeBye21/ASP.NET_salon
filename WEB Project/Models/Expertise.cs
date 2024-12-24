@@ -4,16 +4,23 @@ namespace WEB_Project.Models
 {
     public class Expertise
     {
+        public Expertise()
+        {
+            Employees = new List<Employee>(); //Initialize the list
+        }
+
         [Key]
-        public int Id { get; set; }
+        public int ExpertiseId { get; set; }
 
         [Required]
-        public string Area { get; set; }
+        public string Title { get; set; }
 
         [Required]
         public TimeSpan Time { get; set; }
 
         [Required]
         public decimal Cost { get; set; }
+
+        public List<Employee> Employees { get; set; }
     }
 }

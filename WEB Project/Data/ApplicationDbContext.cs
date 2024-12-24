@@ -13,17 +13,12 @@ namespace WEB_Project.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Expertise> Expertises { get; set; }
-		public DbSet<BarberShopInfo> BarberShopInfos { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<BarberShopInfo> BarberShopInfos { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // Define relationship between ApplicationUser and Expertise
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.Expertises)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

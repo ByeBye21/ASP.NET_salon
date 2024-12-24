@@ -1,13 +1,13 @@
-﻿@model List<WEB_Project.Models.RegisterEmployee>
+﻿@model List<WEB_Project.Models.Employee>
 
 <div class="card shadow border-0 mt-4">
-    <div class="card-header bg-primary bg-gradient text-secondary py-4">
+    <div class="card-header bg-primary bg-gradient text-white py-4">
         <div class="row">
             <div class="col-9 text-center">
                 <h2 class="py-2">Employee List</h2>
             </div>
             <div class="col-3 text-end">
-                <a asp-action="Register" class="btn btn-secondary btn-md">
+                <a asp-action="Create" class="btn btn-secondary btn-md">
                     <i class="bi bi-plus-square-dotted"></i> Add New Employee
                 </a>
             </div>
@@ -26,7 +26,6 @@
                 <thead class="table-primary">
                     <tr>
                         <th>Name</th>
-                        <th>Email</th>
                         <th>Expertise</th>
                         <th>Working Hours</th>
                     </tr>
@@ -38,8 +37,12 @@
                         {
                             <tr>
                                 <td>@employee.Name</td>
-                                <td>@employee.Email</td>
-                                <td>@employee.Expertise</td>
+                                <td>
+                                    @foreach (var expertise in employee.Expertises)
+                                    {
+                                        <span class="badge bg-info">@expertise.Title</span>
+                                    }
+                                </td>
                                 <td>@employee.StartTime.ToString(@"hh\:mm") - @employee.EndTime.ToString(@"hh\:mm")</td>
                             </tr>
                         }

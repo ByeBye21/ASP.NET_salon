@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WEB_Project.Migrations
 {
     /// <inheritdoc />
-    public partial class edit : Migration
+    public partial class Db : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,8 +32,6 @@ namespace WEB_Project.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartTime = table.Column<TimeSpan>(type: "time", nullable: true),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -52,6 +50,52 @@ namespace WEB_Project.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BarberShopInfos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WorkingHours = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BarberShopInfos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.EmployeeId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Expertises",
+                columns: table => new
+                {
+                    ExpertiseId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Time = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expertises", x => x.ExpertiseId);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,24 +205,26 @@ namespace WEB_Project.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Expertises",
+                name: "EmployeeExpertise",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Area = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Time = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    EmployeesEmployeeId = table.Column<int>(type: "int", nullable: false),
+                    ExpertisesExpertiseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Expertises", x => x.Id);
+                    table.PrimaryKey("PK_EmployeeExpertise", x => new { x.EmployeesEmployeeId, x.ExpertisesExpertiseId });
                     table.ForeignKey(
-                        name: "FK_Expertises_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        name: "FK_EmployeeExpertise_Employees_EmployeesEmployeeId",
+                        column: x => x.EmployeesEmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployeeExpertise_Expertises_ExpertisesExpertiseId",
+                        column: x => x.ExpertisesExpertiseId,
+                        principalTable: "Expertises",
+                        principalColumn: "ExpertiseId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -222,9 +268,9 @@ namespace WEB_Project.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expertises_ApplicationUserId",
-                table: "Expertises",
-                column: "ApplicationUserId");
+                name: "IX_EmployeeExpertise_ExpertisesExpertiseId",
+                table: "EmployeeExpertise",
+                column: "ExpertisesExpertiseId");
         }
 
         /// <inheritdoc />
@@ -246,13 +292,22 @@ namespace WEB_Project.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Expertises");
+                name: "BarberShopInfos");
+
+            migrationBuilder.DropTable(
+                name: "EmployeeExpertise");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "Expertises");
         }
     }
 }
