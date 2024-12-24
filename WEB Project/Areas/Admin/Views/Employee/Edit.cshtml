@@ -2,11 +2,12 @@
 
 <div class="card shadow border-0 mt-4">
     <div class="card-header bg-primary bg-gradient text-white py-4">
-        <h2 class="text-center py-2">Register Employee</h2>
+        <h2 class="text-center py-2">Edit Employee</h2>
     </div>
     <div class="card-body p-4">
-        <form asp-action="Create" method="post">
+        <form asp-action="Edit" method="post">
             @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="EmployeeId" />
 
             <div class="mb-3">
                 <label asp-for="Name" class="form-label">Name</label>
@@ -40,12 +41,19 @@
             <div class="mb-3 col-6">
                 <label class="form-label">Selected Expertises</label>
                 <ul id="selectedExpertises" class="list-group">
-                    <!-- Dynamically added selected expertises will appear here -->
+                    @foreach (var expertise in Model.Expertises)
+                    {
+                        <li class="list-group-item">
+                            <span>@expertise.Title</span>
+                            <input type="hidden" name="selectedExpertises" value="@expertise.ExpertiseId" />
+                            <button type="button" class="btn btn-danger btn-sm float-end" onclick="removeExpertise(this)">Remove</button>
+                        </li>
+                    }
                 </ul>
             </div>
 
             <div class="d-flex justify-content-start mt-4">
-                <button type="submit" class="btn btn-primary btn-md me-2">Register</button>
+                <button type="submit" class="btn btn-primary btn-md me-2">Save Changes</button>
                 <a asp-action="Index" class="btn btn-outline-secondary btn-md">Back to List</a>
             </div>
         </form>

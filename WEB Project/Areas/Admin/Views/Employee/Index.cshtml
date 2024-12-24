@@ -28,6 +28,7 @@
                         <th>Name</th>
                         <th>Expertise</th>
                         <th>Working Hours</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +45,17 @@
                                     }
                                 </td>
                                 <td>@employee.StartTime.ToString(@"hh\:mm") - @employee.EndTime.ToString(@"hh\:mm")</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@employee.EmployeeId" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <form asp-action="Delete" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@employee.EmployeeId" />
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         }
                     }

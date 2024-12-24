@@ -6,19 +6,19 @@ namespace WEB_Project.Models
     {
         public Expertise()
         {
-            Employees = new List<Employee>(); //Initialize the list
+            Employees = new List<Employee>(); // Initialize the list
         }
 
         [Key]
         public int ExpertiseId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Expertise title is required.")]
         public string Title { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Time duration is required.")]
         public TimeSpan Time { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Cost is required.")]
         public decimal Cost { get; set; }
 
         public List<Employee> Employees { get; set; }
