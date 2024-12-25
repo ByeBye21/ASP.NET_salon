@@ -15,6 +15,7 @@ namespace WEB_Project.Data
         public DbSet<Expertise> Expertises { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<BarberShopInfo> BarberShopInfos { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

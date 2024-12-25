@@ -6,11 +6,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WEB_Project.Migrations
 {
     /// <inheritdoc />
-    public partial class Db : Migration
+    public partial class appointment : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    AppointmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    BarberShopWorkingHours = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointments", x => x.AppointmentId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -76,11 +93,17 @@ namespace WEB_Project.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    AppointmentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeId);
+                    table.ForeignKey(
+                        name: "FK_Employees_Appointments_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointments",
+                        principalColumn: "AppointmentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -91,11 +114,17 @@ namespace WEB_Project.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Time = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AppointmentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Expertises", x => x.ExpertiseId);
+                    table.ForeignKey(
+                        name: "FK_Expertises_Appointments_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointments",
+                        principalColumn: "AppointmentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -271,6 +300,16 @@ namespace WEB_Project.Migrations
                 name: "IX_EmployeeExpertise_ExpertisesExpertiseId",
                 table: "EmployeeExpertise",
                 column: "ExpertisesExpertiseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_AppointmentId",
+                table: "Employees",
+                column: "AppointmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expertises_AppointmentId",
+                table: "Expertises",
+                column: "AppointmentId");
         }
 
         /// <inheritdoc />
@@ -308,6 +347,9 @@ namespace WEB_Project.Migrations
 
             migrationBuilder.DropTable(
                 name: "Expertises");
+
+            migrationBuilder.DropTable(
+                name: "Appointments");
         }
     }
 }

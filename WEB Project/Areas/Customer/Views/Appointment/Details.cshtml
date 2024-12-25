@@ -1,0 +1,13 @@
+﻿@model WEB_Project.Models.Appointment
+
+<h2>Randevu Detayları</h2>
+<ul>
+    <li><strong>ID:</strong> @Model.AppointmentId</li>
+    <li><strong>Müşteri Adı:</strong> @Model.CustomerName</li>
+    <li><strong>Randevu Tarihi:</strong> @Model.AppointmentDate.ToString("dd.MM.yyyy HH:mm")</li>
+    <li><strong>Durum:</strong> @(Model.Status ? "Onaylandı" : "Bekliyor")</li>
+    <li><strong>Çalışan:</strong> @Model.Employees.FirstOrDefault()?.Name</li>
+    <li><strong>Uzmanlık Alanı:</strong> @Model.Expertises.FirstOrDefault()?.Title</li>
+</ul>
+
+<a asp-action="Index" class="btn btn-secondary">Geri</a>

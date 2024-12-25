@@ -244,6 +244,37 @@ namespace WEB_Project.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WEB_Project.Models.Appointment", b =>
+                {
+                    b.Property<int>("AppointmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppointmentId"));
+
+                    b.Property<DateTime>("AppointmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BarberShopWorkingHours")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("AppointmentId");
+
+                    b.ToTable("Appointments");
+                });
+
             modelBuilder.Entity("WEB_Project.Models.BarberShopInfo", b =>
                 {
                     b.Property<int>("Id")
@@ -281,6 +312,9 @@ namespace WEB_Project.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
+                    b.Property<int?>("AppointmentId")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
@@ -293,6 +327,8 @@ namespace WEB_Project.Migrations
 
                     b.HasKey("EmployeeId");
 
+                    b.HasIndex("AppointmentId");
+
                     b.ToTable("Employees");
                 });
 
@@ -303,6 +339,9 @@ namespace WEB_Project.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpertiseId"));
+
+                    b.Property<int?>("AppointmentId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
@@ -315,6 +354,8 @@ namespace WEB_Project.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ExpertiseId");
+
+                    b.HasIndex("AppointmentId");
 
                     b.ToTable("Expertises");
                 });
@@ -394,6 +435,27 @@ namespace WEB_Project.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WEB_Project.Models.Employee", b =>
+                {
+                    b.HasOne("WEB_Project.Models.Appointment", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("AppointmentId");
+                });
+
+            modelBuilder.Entity("WEB_Project.Models.Expertise", b =>
+                {
+                    b.HasOne("WEB_Project.Models.Appointment", null)
+                        .WithMany("Expertises")
+                        .HasForeignKey("AppointmentId");
+                });
+
+            modelBuilder.Entity("WEB_Project.Models.Appointment", b =>
+                {
+                    b.Navigation("Employees");
+
+                    b.Navigation("Expertises");
                 });
 #pragma warning restore 612, 618
         }
