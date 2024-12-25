@@ -58,10 +58,10 @@ using (var scope = app.Services.CreateScope())
 	{
 		var barberShopInfo = new BarberShopInfo
 		{
-			Name = "Örnek Berber",
-			Address = "Örnek Sokak No:12, Şehir",
-			Phone = "+90 555 555 55 55",
-			WorkingHours = "09:00 - 19:00"
+			Name = "Umut Berber",
+			Address = "Kemalpaşa mahallesi Üniversite Caddesi No:49 Serdivan/Sakarya",
+			Phone = "+90 553 025 42 86",
+			WorkingHours = "09:00 - 21:00"
 		};
 		context.BarberShopInfos.Add(barberShopInfo);
 		await context.SaveChangesAsync();
