@@ -67,8 +67,21 @@ namespace WEB_Project.Areas.Customer.Controllers
                 return View();
             }
 
-            // Calculate the appointment end time
+            // Get the employee details
+            var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == employeeId);
+            if (employee == null)
+            {
+                ViewData["Message"] = "Invalid employee selected.";
+                return View();
+            }
+
+            // Check if the appointment is within the employee's working hours
             var appointmentEndTime = hour.Add(expertise.Time);
+            if (hour.ToTimeSpan() < employee.StartTime || appointmentEndTime.ToTimeSpan() > employee.EndTime)
+            {
+                ViewData["Message"] = $"Appointments for {employee.Name} can only be scheduled between {employee.StartTime} and {employee.EndTime}.";
+                return View();
+            }
 
             // Debugging: Output key time variables
             Console.WriteLine($"Proposed appointment: {hour} - {appointmentEndTime}");
@@ -116,8 +129,6 @@ namespace WEB_Project.Areas.Customer.Controllers
             ViewData["Message"] = "Appointment scheduled successfully.";
             return RedirectToAction(nameof(Index));
         }
-
-
 
         [HttpPost]
         public IActionResult GetEmployees(int expertiseId)
