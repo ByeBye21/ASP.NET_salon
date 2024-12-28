@@ -2,44 +2,47 @@
     <link href="~/css/styles.css" rel="stylesheet" />
 </head>
 
-@model IEnumerable<WEB_Project.Models.Appointment>
-
-@{
-    ViewData["Title"] = "Appointments";
-}
-
-<h2>@ViewData["Title"]</h2>
-
-@if (TempData["Message"] != null)
-{
-    <p class="alert alert-success">@TempData["Message"]</p>
-}
-
-@if (TempData["Error"] != null)
-{
-    <p class="alert alert-danger">@TempData["Error"]</p>
-}
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Employee</th>
-            <th>Expertise</th>
-            <th>Approved</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var appointment in Model)
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-primary bg-gradient text-white py-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="py-2 text-white">Appointments</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        @if (TempData["Message"] != null)
         {
-            <tr>
-                <td>@appointment.Date.ToString("yyyy-MM-dd")</td>
-                <td>@appointment.Hour</td>
-                <td>@appointment.Employees?.Name</td>
-                <td>@appointment.Expertises?.Title</td>
-                <td>@(appointment.IsApproved ? "Yes" : "No")</td>
-            </tr>
+            <p class="alert alert-success">@TempData["Message"]</p>
         }
-    </tbody>
-</table>
+
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger">@TempData["Error"]</p>
+        }
+
+        <table class="table table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Employee</th>
+                    <th>Expertise</th>
+                    <th>Approved</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appointment in Model)
+                {
+                    <tr>
+                        <td>@appointment.Date.ToString("yyyy-MM-dd")</td>
+                        <td>@appointment.Hour</td>
+                        <td>@appointment.Employees?.Name</td>
+                        <td>@appointment.Expertises?.Title</td>
+                        <td>@(appointment.IsApproved ? "Yes" : "No")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

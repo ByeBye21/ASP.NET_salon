@@ -34,10 +34,10 @@ using (var scope = app.Services.CreateScope())
 	}
 
 	// Create an admin user if it doesn't exist
-	string email = "b221210588@sakarya.edu.tr";
+	string email = "b221210090@sakarya.edu.tr";
 	string password = "1234aA!";
 
-	if (await userManager.FindByEmailAsync(email) == null)
+    if (await userManager.FindByEmailAsync(email) == null)
 	{
 		var user = new IdentityUser
 		{
@@ -46,12 +46,13 @@ using (var scope = app.Services.CreateScope())
 			EmailConfirmed = true // Optionally confirm the email
 		};
 
-		var result = await userManager.CreateAsync(user, password);
+        var result = await userManager.CreateAsync(user, password);
 		if (result.Succeeded)
 		{
 			await userManager.AddToRoleAsync(user, "Admin");
-		}
-	}
+        }
+
+    }
 
 	// Seed data for BarberShopInfo table if not already present
 	if (!context.BarberShopInfos.Any())

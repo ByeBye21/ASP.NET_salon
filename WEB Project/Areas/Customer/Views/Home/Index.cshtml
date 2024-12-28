@@ -23,5 +23,5 @@
         <p>@(Model?.WorkingHours ?? "Çalışma saatleri belirtilmemiş")</p>
     </div>
 
-    <button class="mt-3" onclick="location.href='/Appointment'">Randevu Al</button>
+    <button class="mt-3" onclick="window.location.href='@Url.Action("ScheduleAppointment", "Appointment", new { area = "Customer" })'">Book a Appointment</button>
 </div>

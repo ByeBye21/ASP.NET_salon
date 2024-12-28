@@ -4,56 +4,72 @@
     ViewData["Title"] = "Manage Appointments";
 }
 
-<h2>@ViewData["Title"]</h2>
+<head>
+    <link href="~/css/styles.css" rel="stylesheet" />
+</head>
 
-@if (TempData["Message"] != null)
-{
-    <p class="alert alert-success">@TempData["Message"]</p>
-}
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-primary bg-gradient text-white py-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="py-2">@ViewData["Title"]</h2>
+            </div>
+        </div>
+    </div>
 
-@if (TempData["Error"] != null)
-{
-    <p class="alert alert-danger">@TempData["Error"]</p>
-}
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Customer</th>
-            <th>Employee</th>
-            <th>Expertise</th>
-            <th>Approved</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var appointment in Model)
+    <div class="card-body p-4">
+        @if (TempData["Message"] != null)
         {
-            <tr>
-                <td>@appointment.AppointmentID</td>
-                <td>@appointment.Date.ToString("yyyy-MM-dd")</td>
-                <td>@appointment.Hour</td>
-                <td>@appointment.CustomerName</td>
-                <td>@appointment.Employees?.Name</td>
-                <td>@appointment.Expertises?.Title</td>
-                <td>@(appointment.IsApproved ? "Yes" : "No")</td>
-                <td>
-                    @if (!appointment.IsApproved)
-                    {
-                        <form asp-action="Approve" asp-controller="Appointment" asp-area="Admin" method="post" style="display:inline">
-                            <input type="hidden" name="id" value="@appointment.AppointmentID" />
-                            <button type="submit" class="btn btn-success">Approve</button>
-                        </form>
-                    }
-                    <form asp-action="Delete" asp-controller="Appointment" asp-area="Admin" method="post" style="display:inline">
-                        <input type="hidden" name="id" value="@appointment.AppointmentID" />
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
+            <p class="alert alert-success">@TempData["Message"]</p>
         }
-    </tbody>
-</table>
+
+        @if (TempData["Error"] != null)
+        {
+            <p class="alert alert-danger">@TempData["Error"]</p>
+        }
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Customer</th>
+                        <th>Employee</th>
+                        <th>Expertise</th>
+                        <th>Approved</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var appointment in Model)
+                    {
+                        <tr>
+                            <td>@appointment.AppointmentID</td>
+                            <td>@appointment.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@appointment.Hour</td>
+                            <td>@appointment.CustomerName</td>
+                            <td>@appointment.Employees?.Name</td>
+                            <td>@appointment.Expertises?.Title</td>
+                            <td>@(appointment.IsApproved ? "Yes" : "No")</td>
+                            <td>
+                                @if (!appointment.IsApproved)
+                                {
+                                    <form asp-action="Approve" asp-controller="Appointment" asp-area="Admin" method="post" style="display:inline">
+                                        <input type="hidden" name="id" value="@appointment.AppointmentID" />
+                                        <button type="submit" class="btn btn-success">Approve</button>
+                                    </form>
+                                }
+                                <form asp-action="Delete" asp-controller="Appointment" asp-area="Admin" method="post" style="display:inline">
+                                    <input type="hidden" name="id" value="@appointment.AppointmentID" />
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
