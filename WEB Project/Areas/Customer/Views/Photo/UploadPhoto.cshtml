@@ -17,17 +17,22 @@
                 <label for="photo" class="form-label">Select a photo to upload:</label>
                 <input type="file" name="file" id="photo" class="form-control mb-3" required />
             </div>
+
             <button id="upload-submit" type="submit" class="w-25 btn btn-md btn-primary mb-3">Upload Photo</button>
+
         </form>
 
-        @if (ViewBag.ImageUrl != null)
+        @if (ViewBag.ImageUrls != null)
         {
-            <div class="mt-3">
-                <h4>Generated Image:</h4>
-                <!-- Resim ve yazı container'ı buraya ekliyoruz -->
-                <div class="image-container mb-3 text-center">
-                    <img src="@ViewBag.ImageUrl" alt="Generated Image" class="img-fluid mb-3" />
-                    <p class="image-caption">İşte sizin yüzünüze uygun bir saç modeli</p>
+            <div class="mt-4">
+                <h4>Size uygun saç önerilerimiz:</h4>
+                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                    @foreach (var imageUrl in ViewBag.ImageUrls)
+                    {
+                        <div class="image-container text-center">
+                            <img src="@imageUrl" alt="Generated Image" class="img-fluid mb-2" style="max-width: 300px; border-radius: 8px;" />
+                        </div>
+                    }
                 </div>
             </div>
         }

@@ -12,8 +12,8 @@ using WEB_Project.Data;
 namespace WEB_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241225142550_appointment")]
-    partial class appointment
+    [Migration("20241228124737_db")]
+    partial class db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

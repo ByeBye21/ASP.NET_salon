@@ -1,9 +1,9 @@
-﻿// Controllers/PhotoController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace WEB_Project.Areas.Customer.Controllers
 {
@@ -36,9 +36,8 @@ namespace WEB_Project.Areas.Customer.Controllers
 					await file.CopyToAsync(stream);
 				}
 
-				// OpenAI ile analiz veya görüntü oluşturma işlemi
-				ViewBag.ImageUrl = await GenerateImage("Bir erkeğin yüz şekli ve saç dokusuna dayalı modern bir saç modeli önerisi oluştur. Saç modeli, erkekler için uygun olmalı ve kişinin görünümünü geliştirecek şekilde tasarlanmalıdır. Saç uzunluğu ve tarzı erkeklere hitap eden bir şekilde olmalı." +
-					"");
+				// OpenAI API ile birden fazla görsel oluşturma
+				ViewBag.ImageUrls = await GenerateImages("Bir erkeğin yüz şekli ve saç dokusuna dayalı modern bir saç modeli önerisi oluştur. Saç modeli, erkekler için uygun olmalı ve kişinin görünümünü geliştirecek şekilde tasarlanmalıdır. Saç uzunluğu ve tarzı erkeklere hitap eden bir şekilde olmalı.");
 			}
 			else
 			{
@@ -48,7 +47,7 @@ namespace WEB_Project.Areas.Customer.Controllers
 			return View();
 		}
 
-		private async Task<string> GenerateImage(string prompt)
+		private async Task<List<string>> GenerateImages(string prompt)
 		{
 			var client = new HttpClient();
 			client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
@@ -56,7 +55,7 @@ namespace WEB_Project.Areas.Customer.Controllers
 			var requestContent = new StringContent($@"
             {{
                 ""prompt"": ""{prompt}"",
-                ""n"": 1,
+                ""n"": 3,
                 ""size"": ""1024x1024""
             }}", Encoding.UTF8, "application/json");
 
@@ -65,13 +64,19 @@ namespace WEB_Project.Areas.Customer.Controllers
 			if (response.IsSuccessStatusCode)
 			{
 				var responseContent = await response.Content.ReadAsStringAsync();
-				Console.WriteLine(responseContent); // Yanıt JSON formatında yazdırılır
 				dynamic jsonResponse = Newtonsoft.Json.JsonConvert.DeserializeObject(responseContent);
-				return jsonResponse.data[0].url; // Oluşturulan görüntünün URL'sini alıyoruz
+
+				var imageUrls = new List<string>();
+				foreach (var image in jsonResponse.data)
+				{
+					imageUrls.Add((string)image.url);
+				}
+
+				return imageUrls;
 			}
 			else
 			{
-				return $"API Error: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}";
+				return new List<string> { $"API Error: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}" };
 			}
 		}
 	}
