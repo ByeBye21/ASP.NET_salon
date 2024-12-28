@@ -1,0 +1,75 @@
+﻿@model WEB_Project.Models.Appointment
+
+@{
+    ViewData["Title"] = "Schedule Appointment";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (ViewData["Message"] != null)
+{
+    <p class="alert alert-info">@ViewData["Message"]</p>
+}
+
+<form asp-action="ScheduleAppointment" method="post">
+    <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="date" class="form-control" id="date" name="date" required />
+    </div>
+    <div class="form-group">
+        <label for="hour">Time:</label>
+        <input type="time" class="form-control" id="hour" name="hour" required />
+    </div>
+    <div class="form-group">
+        <label for="expertiseId">Expertise:</label>
+        <select class="form-control" id="expertiseId" name="expertiseId" required>
+            <option value="">Select Expertise</option>
+            @if (ViewData["Expertises"] is SelectList expertisesList && expertisesList.Any())
+            {
+                @foreach (var item in expertisesList)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
+            else
+            {
+                <option value="">No expertises available</option>
+            }
+
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="employeeId">Employee:</label>
+        <select class="form-control" id="employeeId" name="employeeId" required>
+            <option value="">Select Employee</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Schedule</button>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#expertiseId').change(function () {
+                var expertiseId = $(this).val();
+                if (expertiseId) {
+                    $.ajax({
+                        url: '/Customer/Appointment/GetEmployees',
+                        type: 'POST',
+                        data: { expertiseId: expertiseId },
+                        success: function (data) {
+                            var employeeDropdown = $('#employeeId');
+                            employeeDropdown.empty();
+                            employeeDropdown.append('<option value="">Select Employee</option>');
+                            $.each(data, function (index, item) {
+                                employeeDropdown.append('<option value="' + item.value + '">' + item.text + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#employeeId').empty().append('<option value="">Select Employee</option>');
+                }
+            });
+        });
+    </script>
+}

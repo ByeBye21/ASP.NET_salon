@@ -9,13 +9,9 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Admin\Views\NewFolder1\**" />
-    <Compile Remove="Areas\Admin\Views\NewFolder\**" />
     <Content Remove="Areas\Admin\Views\NewFolder1\**" />
-    <Content Remove="Areas\Admin\Views\NewFolder\**" />
     <EmbeddedResource Remove="Areas\Admin\Views\NewFolder1\**" />
-    <EmbeddedResource Remove="Areas\Admin\Views\NewFolder\**" />
     <None Remove="Areas\Admin\Views\NewFolder1\**" />
-    <None Remove="Areas\Admin\Views\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>

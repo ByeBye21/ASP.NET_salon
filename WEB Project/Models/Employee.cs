@@ -6,7 +6,8 @@ namespace WEB_Project.Models
     {
         public Employee()
         {
-            Expertises = new List<Expertise>(); // Initialize the list
+            Expertises = new List<Expertise>();
+            Appointments = new List<Appointment>();
         }
 
         [Key]
@@ -22,5 +23,7 @@ namespace WEB_Project.Models
         public TimeSpan EndTime { get; set; }
 
         public List<Expertise> Expertises { get; set; }
+        public List<Appointment> Appointments { get; set; }
+
     }
 }

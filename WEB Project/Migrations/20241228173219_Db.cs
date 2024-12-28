@@ -6,28 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WEB_Project.Migrations
 {
     /// <inheritdoc />
-    public partial class db : Migration
+    public partial class Db : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Appointments",
-                columns: table => new
-                {
-                    AppointmentId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    BarberShopWorkingHours = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointments", x => x.AppointmentId);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -93,17 +76,11 @@ namespace WEB_Project.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    AppointmentId = table.Column<int>(type: "int", nullable: true)
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeId);
-                    table.ForeignKey(
-                        name: "FK_Employees_Appointments_AppointmentId",
-                        column: x => x.AppointmentId,
-                        principalTable: "Appointments",
-                        principalColumn: "AppointmentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -114,17 +91,11 @@ namespace WEB_Project.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Time = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AppointmentId = table.Column<int>(type: "int", nullable: true)
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Expertises", x => x.ExpertiseId);
-                    table.ForeignKey(
-                        name: "FK_Expertises_Appointments_AppointmentId",
-                        column: x => x.AppointmentId,
-                        principalTable: "Appointments",
-                        principalColumn: "AppointmentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -234,6 +205,36 @@ namespace WEB_Project.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    AppointmentID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Hour = table.Column<TimeOnly>(type: "time", nullable: false),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    ExpertiseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointments", x => x.AppointmentID);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Appointments_Expertises_ExpertiseId",
+                        column: x => x.ExpertiseId,
+                        principalTable: "Expertises",
+                        principalColumn: "ExpertiseId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeeExpertise",
                 columns: table => new
                 {
@@ -256,6 +257,16 @@ namespace WEB_Project.Migrations
                         principalColumn: "ExpertiseId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointments_EmployeeId",
+                table: "Appointments",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointments_ExpertiseId",
+                table: "Appointments",
+                column: "ExpertiseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -300,21 +311,14 @@ namespace WEB_Project.Migrations
                 name: "IX_EmployeeExpertise_ExpertisesExpertiseId",
                 table: "EmployeeExpertise",
                 column: "ExpertisesExpertiseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_AppointmentId",
-                table: "Employees",
-                column: "AppointmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Expertises_AppointmentId",
-                table: "Expertises",
-                column: "AppointmentId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Appointments");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -347,9 +351,6 @@ namespace WEB_Project.Migrations
 
             migrationBuilder.DropTable(
                 name: "Expertises");
-
-            migrationBuilder.DropTable(
-                name: "Appointments");
         }
     }
 }

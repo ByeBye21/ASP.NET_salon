@@ -12,8 +12,8 @@ using WEB_Project.Data;
 namespace WEB_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241228124737_db")]
-    partial class db
+    [Migration("20241228173219_Db")]
+    partial class Db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -249,31 +249,36 @@ namespace WEB_Project.Migrations
 
             modelBuilder.Entity("WEB_Project.Models.Appointment", b =>
                 {
-                    b.Property<int>("AppointmentId")
+                    b.Property<int>("AppointmentID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppointmentId"));
-
-                    b.Property<DateTime>("AppointmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("BarberShopWorkingHours")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppointmentID"));
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Status")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpertiseId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeOnly>("Hour")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
-                    b.HasKey("AppointmentId");
+                    b.HasKey("AppointmentID");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("ExpertiseId");
 
                     b.ToTable("Appointments");
                 });
@@ -315,9 +320,6 @@ namespace WEB_Project.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
-                    b.Property<int?>("AppointmentId")
-                        .HasColumnType("int");
-
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
@@ -330,8 +332,6 @@ namespace WEB_Project.Migrations
 
                     b.HasKey("EmployeeId");
 
-                    b.HasIndex("AppointmentId");
-
                     b.ToTable("Employees");
                 });
 
@@ -342,9 +342,6 @@ namespace WEB_Project.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpertiseId"));
-
-                    b.Property<int?>("AppointmentId")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
@@ -357,8 +354,6 @@ namespace WEB_Project.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ExpertiseId");
-
-                    b.HasIndex("AppointmentId");
 
                     b.ToTable("Expertises");
                 });
@@ -440,25 +435,28 @@ namespace WEB_Project.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WEB_Project.Models.Employee", b =>
-                {
-                    b.HasOne("WEB_Project.Models.Appointment", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("AppointmentId");
-                });
-
-            modelBuilder.Entity("WEB_Project.Models.Expertise", b =>
-                {
-                    b.HasOne("WEB_Project.Models.Appointment", null)
-                        .WithMany("Expertises")
-                        .HasForeignKey("AppointmentId");
-                });
-
             modelBuilder.Entity("WEB_Project.Models.Appointment", b =>
                 {
+                    b.HasOne("WEB_Project.Models.Employee", "Employees")
+                        .WithMany("Appointments")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WEB_Project.Models.Expertise", "Expertises")
+                        .WithMany()
+                        .HasForeignKey("ExpertiseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Employees");
 
                     b.Navigation("Expertises");
+                });
+
+            modelBuilder.Entity("WEB_Project.Models.Employee", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }
