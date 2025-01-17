@@ -6,6 +6,7 @@ using WEB_Project.Models;
 namespace WEB_Project.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class AppointmentController : Controller
     {
         private readonly ApplicationDbContext _context;
